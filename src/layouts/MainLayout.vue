@@ -37,7 +37,13 @@
       bordered
     >
       <q-list class="q-ma-lg">
-     <h2>YOR POS</h2>
+        <img
+        align="center"
+      alt="Quasar logo"
+      src="~assets/yorpost.png"
+      height="200"
+      width="250"
+    >
 <!-- <q-btn clickable @click="$router.push('/home')">Home </q-btn>
 <q-btn clickable @click="$router.push('/sign-in')">Login</q-btn>
 <q-btn clickable @click="$router.push('/register')">Register </q-btn>
