@@ -1,5 +1,18 @@
 <template>
   <div>
+    <div align="right">
+      <q-btn
+
+        icon="add"
+        label="Add Product"
+        @click="addModal()"
+        flat
+        dense
+      >
+      </q-btn>
+    </div>
+
+
     <div hidden align="right">
       <q-btn hidden @click="handleSignOut" v-if="isLoggedIn">log out</q-btn>
     </div>
@@ -13,14 +26,7 @@
         flat
         dense
       /> -->
-      <q-btn
-        icon="add"
-        class="q-pa-lg"
-        label="Create Product"
-        @click="addModal()"
-        flat
-        dense
-      />
+
       <q-dialog v-model="openedAddModal">
         <q-card class="q-ma-md" width="500px">
           <q-card-section>
@@ -32,12 +38,12 @@
             >
             </q-input>
 
-            <q-input
+            <!-- <q-input
 
               v-model="description"
               label="Description"
             >
-            </q-input>
+            </q-input> -->
 
             <q-input
 
@@ -51,19 +57,19 @@
               label="Price"
             >
             </q-input>
-            <q-input
+            <!-- <q-input
 
               v-model.number="pricebefore"
               label="Price Before"
             >
-            </q-input>
+            </q-input> -->
             <q-input
 
               v-model="brand"
-              label="Brand"
+              label="Category"
             >
             </q-input>
-            <q-rating
+            <!-- <q-rating
               v-model="ratings"
               max="5"
               size="3.5em"
@@ -72,7 +78,7 @@
               icon-selected="star"
               icon-half="star_half"
               no-dimming
-            />
+            /> -->
             <q-separator />
             <br />
             <q-file
@@ -93,10 +99,10 @@
                 />
               </template>
 
-              <template v-slot:hint> Field hint </template>
+              <template v-slot:hint> Product Pic </template>
             </q-file>
             <br />
-            <q-file
+            <!-- <q-file
               filled
               bottom-slots
               v-model="fileme"
@@ -115,12 +121,12 @@
               </template>
 
               <template v-slot:hint> Field hint </template>
-            </q-file>
+            </q-file> -->
           </q-card-section>
           <q-card-actions align="right">
             <q-btn
               color="accent"
-              label="Save"
+              label="ADD Product"
               class="q-pa-lg"
               @click="Add()"
               flat
