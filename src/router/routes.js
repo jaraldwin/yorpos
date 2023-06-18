@@ -4,9 +4,10 @@ const routes = [
   {
     path: "/",
     component: () => import("pages/SignIn.vue"),
-    children: [{ path: "index", component: () => import("pages/IndexPage.vue") }],
+    children: [
+      { path: "index", component: () => import("pages/IndexPage.vue") },
+    ],
   },
-
 
   { path: "/register", component: () => import("pages/RegisterPage.vue") },
   { path: "/sign-in", component: () => import("pages/SignIn.vue") },
@@ -18,18 +19,31 @@ const routes = [
   //   },
   // },
   {
-    path: '/',
-    component: () => import('layouts/MainLayout.vue'),
+    path: "/",
+    component: () => import("layouts/MainLayout.vue"),
     children: [
-      { path: "/home", component: () => import("pages/HomePage.vue"),   meta: {
-        requiresAuth: true,
-      }, },
-      { path: 'menu', component: () => import('pages/FeedPage.vue'),
+      {
+        path: "home",
+        component: () => import("pages/HomePage.vue"),
         meta: {
-      requiresAuth: true,
-    },
-     }
-    ]
+          requiresAuth: true,
+        },
+      },
+      {
+        path: "menu",
+        component: () => import("pages/FeedPage.vue"),
+        meta: {
+          requiresAuth: true,
+        },
+      },
+      {
+        path: "payment",
+        component: () => import("pages/PaymentPage.vue"),
+        meta: {
+          requiresAuth: true,
+        },
+      },
+    ],
   },
 
   {
@@ -47,6 +61,5 @@ const routes = [
 //     next("/");
 //   }
 // })
-
 
 export default routes;

@@ -1,17 +1,9 @@
 <template>
   <div>
     <div align="right">
-      <q-btn
-
-        icon="add"
-        label="Add Product"
-        @click="addModal()"
-        flat
-        dense
-      >
+      <q-btn icon="add" label="Add Product" @click="addModal()" flat dense>
       </q-btn>
     </div>
-
 
     <div hidden align="right">
       <q-btn hidden @click="handleSignOut" v-if="isLoggedIn">log out</q-btn>
@@ -45,30 +37,15 @@
             >
             </q-input> -->
 
-            <q-input
-
-              v-model="specifications"
-              label="Specifications"
-            >
-            </q-input>
-            <q-input
-
-              v-model.number="price"
-              label="Price"
-            >
-            </q-input>
+            <q-input v-model="specifications" label="Specifications"> </q-input>
+            <q-input v-model.number="price" label="Price"> </q-input>
             <!-- <q-input
 
               v-model.number="pricebefore"
               label="Price Before"
             >
             </q-input> -->
-            <q-input
-
-              v-model="brand"
-              label="Category"
-            >
-            </q-input>
+            <q-input v-model="brand" label="Category"> </q-input>
             <!-- <q-rating
               v-model="ratings"
               max="5"
@@ -134,72 +111,122 @@
             />
           </q-card-actions>
         </q-card>
-      </q-dialog >
-      <div class="q-pa-md  row items-start ">
-
-        <q-card style="background-color: #D8E6E9 !important" class="my-card q-ma-md" :key="item.id" v-for="item in datassss" @click="editData(item)">
-  <q-img width="300px" height="250px" :src="item.image" >
-    <q-tooltip
-          :target="targetEl"
-          anchor="center middle"
-          self="center middle"
-          class="bg-amber-14"
-        ><span class="text-weight-regular text-h6">ADD</span></q-tooltip>
-  </q-img>
-  <q-card-section>
-    <div align="center" class="text-h6 text-uppercase" style="white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 250px;">
-      {{ item.name }} <span class="text-h6 text-uppercase">&#8369;</span> {{ item.price }}
-    </div>
-    <div>
-      <span class=" text-uppercase">Category:</span>
-      <q-badge rounded color="amber-10" class="q-ml-lg">{{ item.brand }}</q-badge>
-    </div>
-  </q-card-section>
-  <q-card-section align="right">
-    <q-btn
-      icon="close"
-      hidden
-      @click="openedpassData(item)"
-    />
-  </q-card-section>
-</q-card>
-
-
-    </div>
+      </q-dialog>
+      <div class="q-pa-md row items-start">
+        <q-card
+          style="background-color: #d8e6e9 !important"
+          class="my-card q-ma-md"
+          :key="item.id"
+          v-for="item in datassss"
+          @mouseover="targetEl = true"
+        >
+          <q-img width="300px" height="250px" :src="item.image">
+            <q-tooltip
+              class="q-pl-lg q-pr-lg"
+              v-if="targetEl"
+              :target="targetEl"
+              anchor="center middle"
+              self="center middle"
+              style="background-color: #d89f65"
+              ><span class="text-weight-regular text-h5 text-black"
+                >ADD</span
+              ></q-tooltip
+            >
+          </q-img>
+          <q-card-section>
+            <div
+              align="center"
+              class="text-h6 text-uppercase"
+              style="
+                white-space: nowrap;
+                overflow: hidden;
+                text-overflow: ellipsis;
+                max-width: 250px;
+              "
+            >
+              {{ item.name }}
+              <span class="text-h6 text-uppercase">&#8369;</span>
+              {{ item.price }}
+            </div>
+            <div>
+              <span class="text-uppercase">Category:</span>
+              <q-badge rounded color="amber-10" class="q-ml-lg">{{
+                item.brand
+              }}</q-badge>
+            </div>
+          </q-card-section>
+          <q-card-section align="right">
+            <q-btn
+              color="secondary"
+              class="q-mr-md"
+              icon="edit"
+              @click="editData(item)"
+            />
+            <q-btn
+              color="negative"
+              icon="close"
+              hidden
+              @click="openedpassData(item)"
+            />
+          </q-card-section>
+        </q-card>
+      </div>
       <!-- edit item -->
-      <q-dialog v-model="editModal" width="700px">
-        <q-form @submit="onSubmitUpdate" width="700px">
-          <q-card style="width: 700px">
-            <q-card-section>
-              <div class="text-subtitle2">
-                <q-input
-                  v-model="docName"
-                  label="docName"
-                />
-                <q-input
-                  v-model="docDesc"
-                  label="docDesc"
+      <q-dialog persistent v-model="editModal" width="700px">
+        <q-card style="width: 100%; max-width: 800px; padding: 20px">
+          <div class="text-h6">Edit Product</div>
+          <q-card-section>
+            <div class="text-subtitle2">
+              <q-input v-model="name" label="Item name" />
+              <q-input v-model="specifications" label="Specifications" />
+              <q-input v-model="price" label="Price" />
+              <q-file
+                filled
+                bottom-slots
+                v-model="fileme"
+                label="Product Image"
+                counter
+              >
+                <template v-slot:prepend>
+                  <q-icon name="cloud_upload" @click.stop.prevent />
+                </template>
+                <template v-slot:append>
+                  <q-icon
+                    name="close"
+                    @click.stop.prevent="fileme = null"
+                    class="cursor-pointer"
+                  />
+                </template>
+              </q-file>
+              <div v-if="fileme">
+                <img
+                  style="max-width: 200px; max-height: 200px"
+                  :src="fileme"
+                  alt="productImage"
                 />
               </div>
-            </q-card-section>
+            </div>
+          </q-card-section>
 
-            <q-card-actions>
-              <q-btn
-                label="Cancel"
-                type="reset"
-                v-close-popup
-                class="col"
-                unelevated
-              />
-              <q-btn
-                unelevated
-                type="submit"
-                label="Save"
-                class="col"
-              />
-            </q-card-actions>
-          </q-card>
-        </q-form>
+          <q-card-actions>
+            <q-btn
+              label="Cancel"
+              type="reset"
+              v-close-popup
+              class="col"
+              unelevated
+              @click="cancelEdit"
+            />
+            <q-btn
+              unelevated
+              @click="saveEdit"
+              type="submit"
+              label="Save"
+              class="col"
+              color="primary"
+            />
+          </q-card-actions>
+        </q-card>
       </q-dialog>
 
       <!-- delete item -->
@@ -222,7 +249,13 @@
 </template>
 
 <script setup>
-import { onMounted, ref,getCurrentInstance,onBeforeMount,onServerPrefetch } from "vue";
+import {
+  onMounted,
+  ref,
+  getCurrentInstance,
+  onBeforeMount,
+  onServerPrefetch,
+} from "vue";
 import { useRouter } from "vue-router";
 import { useQuasar } from "quasar";
 import { initializeApp, getApp } from "firebase/app";
@@ -252,22 +285,22 @@ const datassss = ref([]);
 // For Firebase JS SDK v7.20.0 and later, measurementId is optional
 const description = ref("");
 const name = ref("");
-const specifications = ref("")
-const price = ref(0)
-const pricebefore = ref(0)
+const specifications = ref("");
+const price = ref(0);
+const pricebefore = ref(0);
 const ratings = ref(2.3);
-const brand = ref("")
-const order_quatity = (0)
-const images = ("")
+const brand = ref("");
+const order_quatity = 0;
+const images = "";
 const opened = ref(false);
 const docId = ref("");
 const docName = ref("");
 const docDesc = ref("");
-const fileme = ref(null);
+const fileme = ref([]);
 const image = ref("");
 const editModal = ref(false);
 const openedAddModal = ref(false);
-const uuid = ref("")
+const uuid = ref("");
 const firebaseConfig = {
   apiKey: "AIzaSyDbjhOcP2TgjTn1Me9NxaGLJYjF8i8ktZE",
   authDomain: "fire-tut-981d2.firebaseapp.com",
@@ -284,6 +317,9 @@ const firebaseConfig = {
 const app1 = initializeApp(firebaseConfig);
 const db = getFirestore(app1);
 const storage = app.$getStorage();
+
+const editedItem = ref(null);
+const targetEl = ref(false);
 
 async function addModal() {
   openedAddModal.value = true;
@@ -316,8 +352,8 @@ async function Add() {
       brand: brand.value,
       image: image.value,
       ratings: ratings.value,
-      percent: (price.value)/(pricebefore.value)*100 ,
-      userid: uuid.value
+      percent: (price.value / pricebefore.value) * 100,
+      userid: uuid.value,
     });
     openedAddModal.value = false;
     (name.value = ""),
@@ -328,49 +364,53 @@ async function Add() {
   }
 }
 
-async function editData(item) {
-  editModal.value = true;
-  docName.value = item.name;
-  docId.value = item.id;
-  docDesc.value = item.description;
-}
 async function openedpassData(item) {
   docId.value = item.id;
   docName.value = item.name;
   opened.value = true;
 }
+
+async function editData(item) {
+  name.value = item.name;
+  specifications.value = item.specifications;
+  price.value = item.price;
+  fileme.value.push(item.image);
+  editModal.value = true;
+}
+
+async function saveEdit() {}
+
 async function confirmed() {
   opened.value = false;
   await deleteDoc(doc(db, "iam", docId.value));
 }
 onServerPrefetch(async () => {
   auth = getAuth();
- onAuthStateChanged(auth, (user) => {
+  onAuthStateChanged(auth, (user) => {
     // uuid.value = user.uid
     // console.log(uuid.value)
     if (user) {
       isLoggedIn.value = true;
-      console.log(isLoggedIn.value)
+      console.log(isLoggedIn.value);
     } else {
       isLoggedIn.value = false;
-      console.log(isLoggedIn.value)
+      console.log(isLoggedIn.value);
     }
   });
-})
+});
 var user = getAuth().currentUser;
 var nameme, email, photoURL, uid;
-console.log(user.uid)
-uuid.value = user.uid
-    if(user != null) {
-       nameme = user.displayName;
-       uid = user.uid;
-
-    }
-console.log( 'yow',uuid.value)
-const q = query(collection(db, "iam"), where("userid", "==",  uuid.value));
+console.log(user.uid);
+uuid.value = user.uid;
+if (user != null) {
+  nameme = user.displayName;
+  uid = user.uid;
+}
+console.log("yow", uuid.value);
+const q = query(collection(db, "iam"), where("userid", "==", uuid.value));
 const unsubscribe = onSnapshot(q, (snapshot) => {
   snapshot.docChanges().forEach((change) => {
-    console.log('doc.data()',change.doc.data())
+    console.log("doc.data()", change.doc.data());
     // datassss.value =change
     var data = {
       ...change.doc.data(),
@@ -392,14 +432,20 @@ const unsubscribe = onSnapshot(q, (snapshot) => {
   });
 });
 const handleSignOut = () => {
-    const auth = getAuth();
-signOut(auth).then(() => {
-  // Sign-out successful.
-  router.push("/sign-in")
-  console.log('Sign-out successful.')
-}).catch((error) => {
-    router.push("/")
- console.log(error)
-});
+  const auth = getAuth();
+  signOut(auth)
+    .then(() => {
+      // Sign-out successful.
+      router.push("/sign-in");
+      console.log("Sign-out successful.");
+    })
+    .catch((error) => {
+      router.push("/");
+      console.log(error);
+    });
 };
+
+function cancelEdit() {
+  editModal.value = false;
+}
 </script>

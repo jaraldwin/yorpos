@@ -3,7 +3,7 @@
     <q-header elevated class="bg-white text-grey-8" height-hint="64">
       <q-toolbar class="GPL__toolbar" style="height: 64px">
         <q-btn
-        v-if="!$q.platform.is.desktop"
+          v-if="!$q.platform.is.desktop"
           flat
           dense
           round
@@ -15,19 +15,29 @@
 
         <q-toolbar-title shrink class="row items-center no-wrap">
           <img
-          v-if="$q.platform.is.desktop"
-      alt="Quasar logo"
-      width="150"
-      height="50"
-      src="~assets/yorpost.png"
-    >
+            v-if="$q.platform.is.desktop"
+            alt="Quasar logo"
+            width="150"
+            height="50"
+            src="~assets/yorpost.png"
+          />
         </q-toolbar-title>
 
-
-        <q-input class="GPL__toolbar-input" dense standout="bg-primary" v-model="search" placeholder="Search">
+        <q-input
+          class="GPL__toolbar-input"
+          dense
+          v-model="search"
+          placeholder="Search product or any order..."
+          filled
+        >
           <template v-slot:prepend>
             <q-icon v-if="search === ''" name="search" />
-            <q-icon v-else name="clear" class="cursor-pointer" @click="search = ''" />
+            <q-icon
+              v-else
+              name="clear"
+              class="cursor-pointer"
+              @click="search = ''"
+            />
           </template>
         </q-input>
 
@@ -47,15 +57,20 @@
           </q-menu>
         </q-btn> -->
 
-
         <q-space />
 
         <div class="q-gutter-sm row items-center no-wrap">
+<<<<<<< HEAD
 
 
           <q-btn round flat @click="handleSignOut">
             <q-avatar  size="26px">
               <img src="https://cdn.quasar.dev/img/boy-avatar.png">
+=======
+          <q-btn round flat>
+            <q-avatar size="26px">
+              <img src="https://cdn.quasar.dev/img/boy-avatar.png" />
+>>>>>>> 4e21ed4b0090dab77cf3a633ae4569ca4de469fb
             </q-avatar>
             <q-tooltip>Log out</q-tooltip>
           </q-btn>
@@ -73,16 +88,21 @@
         <q-toolbar class="GPL__toolbar">
           <q-toolbar-title class="row items-center text-grey-8">
             <img
-      alt="Quasar logo"
-      width="150"
-      height="50"
-      src="~assets/yorpost.png"
-    >
+              alt="You POS Logo"
+              width="150"
+              height="50"
+              src="~assets/yorpost.png"
+            />
           </q-toolbar-title>
         </q-toolbar>
 
         <q-list padding>
-          <q-item v-for="draw in drawer" :key="draw.text" clickable class="GPL__drawer-item">
+          <q-item
+            v-for="draw in drawer"
+            :key="draw.text"
+            clickable
+            class="GPL__drawer-item"
+          >
             <q-item-section avatar>
               <q-icon :name="draw.icon" />
             </q-item-section>
@@ -92,8 +112,6 @@
           </q-item>
 
           <q-separator class="q-my-md" />
-
-
 
           <!-- <q-item clickable class="GPL__drawer-item GPL__drawer-item--storage">
             <q-item-section avatar>
@@ -110,36 +128,94 @@
     </q-drawer>
 
     <q-page-container class="GPL__page-container">
+      <q-separator
+        vertical
+        style="color: #d8dbd9; height: 100vh; position: fixed"
+      />
       <router-view />
 
       <q-page-sticky v-if="$q.screen.gt.sm" expand position="left">
         <div class="fit q-pt-lg q-px-sm column">
-          <q-btn round flat color="grey-8" stack no-caps size="26px" class="GPL__side-btn">
+          <q-btn
+            round
+            flat
+            color="grey-8"
+            stack
+            no-caps
+            size="26px"
+            class="GPL__side-btn"
+          >
             <q-icon size="22px" name="tablet" />
             <div class="GPL__side-btn__label">TABLES</div>
           </q-btn>
 
-          <q-btn round flat color="grey-8" stack no-caps size="26px" class="GPL__side-btn">
+          <q-btn
+            @click="link = 'menu' && $router.push('/menu')"
+            round
+            flat
+            stack
+            no-caps
+            size="26px"
+            :class="[
+              'GPL__side-btn',
+              { 'my-menu-link': isActiveRoute('/menu') },
+            ]"
+            :to="'/menu'"
+          >
             <q-icon size="22px" name="payment" />
             <div class="GPL__side-btn__label">MENU</div>
           </q-btn>
 
-          <q-btn round flat color="grey-8" stack no-caps size="26px" class="GPL__side-btn">
+          <q-btn
+            @click="link = 'menu' && $router.push('/menu')"
+            round
+            flat
+            color="grey-8"
+            stack
+            no-caps
+            size="26px"
+            :class="[
+              'GPL__side-btn',
+              { 'my-menu-link': isActiveRoute('/payment') },
+            ]"
+            :to="'/payment'"
+          >
             <q-icon size="22px" name="assistant" />
             <div class="GPL__side-btn__label">PAYMENT</div>
-            <q-badge floating color="red" text-color="white" style="top: 8px; right: 16px">
+            <q-badge
+              floating
+              color="red"
+              text-color="white"
+              style="top: 8px; right: 16px"
+            >
               1
             </q-badge>
           </q-btn>
 
-          <q-btn round flat color="grey-8" stack no-caps size="26px" class="GPL__side-btn">
+          <q-btn
+            round
+            flat
+            color="grey-8"
+            stack
+            no-caps
+            size="26px"
+            class="GPL__side-btn"
+          >
             <q-icon size="22px" name="dashboard" />
             <div class="GPL__side-btn__label">ORDERS</div>
           </q-btn>
 
-          <q-btn round flat color="grey-8" stack no-caps size="26px" class="GPL__side-btn">
+          <q-btn
+            round
+            flat
+            color="grey-8"
+            stack
+            no-caps
+            size="26px"
+            class="GPL__side-btn"
+          >
             <q-icon size="22px" name="settings" />
-            <div class="GPL__side-btn__label">SeTTINGS</div>
+            <div class="GPL__side-btn__label">SETTINGS</div>
           </q-btn>
         </div>
       </q-page-sticky>
@@ -148,21 +224,36 @@
 </template>
 
 <script>
+<<<<<<< HEAD
 import { ref } from 'vue'
 import { getAuth, onAuthStateChanged, signOut } from "@firebase/auth";
+=======
+import { ref } from "vue";
+import { useQuasar } from "quasar";
+>>>>>>> 4e21ed4b0090dab77cf3a633ae4569ca4de469fb
 import { useRouter } from "vue-router";
 
 export default {
-  name: 'GooglePhotosLayout',
+  name: "GooglePhotosLayout",
 
+<<<<<<< HEAD
   setup () {
     const leftDrawerOpen = ref(false)
     const search = ref('')
     const storage = ref(0.26)
     const router = useRouter();
+=======
+  setup() {
+    const leftDrawerOpen = ref(false);
+    const search = ref("");
+    const storage = ref(0.26);
+>>>>>>> 4e21ed4b0090dab77cf3a633ae4569ca4de469fb
 
-    function toggleLeftDrawer () {
-      leftDrawerOpen.value = !leftDrawerOpen.value
+    const $q = useQuasar();
+    const router = useRouter();
+
+    function toggleLeftDrawer() {
+      leftDrawerOpen.value = !leftDrawerOpen.value;
     }
     const handleSignOut = () => {
       console.log("nobaria")
@@ -177,30 +268,37 @@ signOut(auth).then(() => {
 });
 }
 
+    const isActiveRoute = (routePath) => {
+      return router.currentRoute.value.path === routePath;
+    };
+
     return {
       leftDrawerOpen,
       handleSignOut,
       router,
       search,
       storage,
+      isActiveRoute,
 
       drawer: [
         // <font-awesome-icon :icon="['fat', 'tablet-rugged']" />
-        { icon: 'tablet', text: 'TABLES', to: 'home' },
-        { icon: 'menu', text: 'MENU' },
-        { icon: 'payment', text: 'PAYMENT' },
-        { icon: 'dashboard', text: 'ORDERS' },
-        { icon: 'settings', text: 'SETTINGS' }
+        { icon: "tablet", text: "TABLES", to: "home" },
+        { icon: "menu", text: "MENU" },
+        { icon: "payment", text: "PAYMENT" },
+        { icon: "dashboard", text: "ORDERS" },
+        { icon: "settings", text: "SETTINGS" },
       ],
 
-
-      toggleLeftDrawer
-    }
-  }
-}
+      toggleLeftDrawer,
+    };
+  },
+};
 </script>
 
 <style lang="sass">
+.my-menu-link
+  color: #2E636E !important
+  // background: #26A69A
 .GPL
 
   &__toolbar
