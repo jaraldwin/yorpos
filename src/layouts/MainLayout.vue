@@ -53,11 +53,11 @@
         <div class="q-gutter-sm row items-center no-wrap">
 
 
-          <q-btn round flat>
-            <q-avatar size="26px">
+          <q-btn round flat @click="handleSignOut">
+            <q-avatar  size="26px">
               <img src="https://cdn.quasar.dev/img/boy-avatar.png">
             </q-avatar>
-            <q-tooltip>Account</q-tooltip>
+            <q-tooltip>Log out</q-tooltip>
           </q-btn>
         </div>
       </q-toolbar>
@@ -149,6 +149,8 @@
 
 <script>
 import { ref } from 'vue'
+import { getAuth, onAuthStateChanged, signOut } from "@firebase/auth";
+import { useRouter } from "vue-router";
 
 export default {
   name: 'GooglePhotosLayout',
@@ -157,13 +159,28 @@ export default {
     const leftDrawerOpen = ref(false)
     const search = ref('')
     const storage = ref(0.26)
+    const router = useRouter();
 
     function toggleLeftDrawer () {
       leftDrawerOpen.value = !leftDrawerOpen.value
     }
+    const handleSignOut = () => {
+      console.log("nobaria")
+    const auth = getAuth();
+signOut(auth).then(() => {
+  // Sign-out successful.
+  router.push("/sign-in")
+  console.log('Sign-out successful.')
+}).catch((error) => {
+    router.push("/")
+ console.log(error)
+});
+}
 
     return {
       leftDrawerOpen,
+      handleSignOut,
+      router,
       search,
       storage,
 
