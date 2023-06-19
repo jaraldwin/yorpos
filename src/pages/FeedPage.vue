@@ -32,7 +32,7 @@
 
             <q-input v-model="specifications" label="Specifications"> </q-input>
             <q-input v-model.number="price" label="Price"> </q-input>
-            <q-input v-model="brand" label="Category"> </q-input>
+            <q-input v-model="category" label="Category"> </q-input>
 
             <q-separator />
             <br />
@@ -118,7 +118,7 @@
                 <div>
                   <span class="text-uppercase">Category:</span>
                   <q-badge rounded color="amber-10" class="q-ml-lg">{{
-                    item.brand
+                    item.category
                   }}</q-badge>
                 </div>
               </q-card-section>
@@ -150,10 +150,31 @@
                 <q-card-section>
                   <div class="row items-center no-wrap">
                     <div class="col">
-                      <div class="text-h6">ORDER #</div>
+                      <div class="text-h6">
+                        ORDER#
+                        <q-badge
+                          v-if="orders.length === 1"
+                          color="blue"
+                          align="right"
+                        >
+                          {{ currentYear }}{{ uuid.slice(0, 5) }}
+                        </q-badge>
+                      </div>
                       <q-separator inset />
-                      <div v-if="orders.length === 0" class="text-subtitle2">
-                        No orders
+                      <div
+                        style="text-align: center"
+                        v-if="orders.length === 0"
+                        class="text-subtitle2 q-ma-sm"
+                      >
+                        <img
+                          class=""
+                          align="center"
+                          v-if="$q.platform.is.desktop"
+                          alt="Quasar logo"
+                          width="150"
+                          height="150"
+                          src="~assets/noitem.png"
+                        />
                       </div>
                       <div v-else>
                         <div
@@ -329,6 +350,7 @@
 </template>
 
 <script setup>
+import { nanoid } from "nanoid";
 import {
   onMounted,
   computed,
@@ -357,7 +379,7 @@ import {
   ref as storageRef,
   getDownloadURL as stogegetDownloadURL,
 } from "@firebase/storage";
-
+console.log("NANOID", nanoid());
 import { getAuth, onAuthStateChanged, signOut } from "@firebase/auth";
 const app = getCurrentInstance().appContext.config.globalProperties;
 
@@ -370,7 +392,7 @@ const specifications = ref("");
 const price = ref(0);
 const pricebefore = ref(0);
 const ratings = ref(2.3);
-const brand = ref("");
+const category = ref("");
 const order_quatity = 0;
 const images = "";
 const opened = ref(false);
@@ -382,8 +404,10 @@ const image = ref("");
 const editModal = ref(false);
 const openedAddModal = ref(false);
 const uuid = ref("");
+const firstFiveCharacters = uuid.value.slice(0, 5);
 const orders = ref([]);
 const grandTot = ref(0);
+const currentYear = new Date().getFullYear();
 
 const firebaseConfig = {
   apiKey: "AIzaSyDbjhOcP2TgjTn1Me9NxaGLJYjF8i8ktZE",
@@ -433,7 +457,7 @@ async function Add() {
       price: price.value,
       pricebefore: pricebefore.value,
       ratings: ratings.value,
-      brand: brand.value,
+      category: category.value,
       image: image.value,
       ratings: ratings.value,
       percent: (price.value / pricebefore.value) * 100,
@@ -463,19 +487,30 @@ async function editData(item) {
 }
 
 const addOrder = (item, quantity = 1) => {
+  const firstFiveCharacters = uuid.value.slice(0, 5);
+  const currentYear = new Date().getFullYear();
+  const currentDate = new Date();
+  const options = { month: "short", day: "numeric", year: "numeric" };
+  const formattedDate = currentDate.toLocaleDateString("en-US", options);
   const newOrder = {
-    id: item.id,
+    itemiId: item.id,
+    userid: item.userid,
+    orderId: "ORDER#" + currentYear + firstFiveCharacters,
     name: item.name,
     price: item.price,
+    desc: item.description,
+    category: item.category,
     image: item.image,
+    orderDate: formattedDate,
     order_quantity: quantity,
     payment_status: "unpaid",
   };
   orders.value = [...orders.value, { ...newOrder, grand_total: grandTot }]; // Insert grand_total outside newOrder
+  console.log("ORDERS", orders.value);
 };
 async function placeOrder() {
   try {
-    const docRef = await addDoc(collection(db, "customerorder"), {
+    const docRef = await addDoc(collection(db, "orders"), {
       orders: orders.value, // Pass the orders value to the "customerorder" collection
     });
 
