@@ -71,10 +71,9 @@
         </q-card>
       </q-dialog>
     </div>
-    <div class="row">
-      <div class="col">
-        <div class="row">
-          <div class="col-9 row">
+    <!-- now -->
+     <div class="row">
+          <div  class="col-9 row"  style="align-items: flex-start;">
             <q-card
               style="background-color: #d8e6e9 !important"
               @mouseover="targetEl = true"
@@ -137,8 +136,10 @@
                 />
               </q-card-section>
             </q-card>
+
           </div>
-          <div class="col">
+          <!-- NEXT -->
+          <div class="col row">
             <div>
               <q-card
                 flat
@@ -148,14 +149,14 @@
               >
                 <!-- nasa -->
                 <q-card-section>
-                  <div class="row items-center no-wrap">
-                    <div class="col">
+                  <div>
+                    <div>
                       <div class="text-h6">
                         ORDER#
                         <q-badge
-                          v-if="orders.length === 1"
                           color="blue"
                           align="right"
+                          v-if="orders.length !== 0"
                         >
                           {{ currentYear }}{{ uuid.slice(0, 5) }}
                         </q-badge>
@@ -269,8 +270,7 @@
                   </q-card-actions>
                 </q-card>
               </q-card>
-            </div>
-          </div>
+
         </div>
       </div>
       <q-dialog persistent v-model="editModal" width="700px">
@@ -492,8 +492,16 @@ const addOrder = (item, quantity = 1) => {
   const currentDate = new Date();
   const options = { month: "short", day: "numeric", year: "numeric" };
   const formattedDate = currentDate.toLocaleDateString("en-US", options);
+
+  const existingOrder = orders.value.find((order) => order.itemId === item.id);
+  if (existingOrder) {
+    // Item already exists in orders, update the quantity
+    existingOrder.order_quantity += quantity;
+    return;
+  }
+
   const newOrder = {
-    itemiId: item.id,
+    itemId: item.id,
     userid: item.userid,
     orderId: "ORDER#" + currentYear + firstFiveCharacters,
     name: item.name,
@@ -505,7 +513,7 @@ const addOrder = (item, quantity = 1) => {
     order_quantity: quantity,
     payment_status: "unpaid",
   };
-  orders.value = [...orders.value, { ...newOrder, grand_total: grandTot }]; // Insert grand_total outside newOrder
+  orders.value = [...orders.value, { ...newOrder, grand_total: grandTot }];
   console.log("ORDERS", orders.value);
 };
 async function placeOrder() {
