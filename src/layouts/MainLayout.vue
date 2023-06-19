@@ -60,17 +60,9 @@
         <q-space />
 
         <div class="q-gutter-sm row items-center no-wrap">
-<<<<<<< HEAD
-
-
-          <q-btn round flat @click="handleSignOut">
-            <q-avatar  size="26px">
-              <img src="https://cdn.quasar.dev/img/boy-avatar.png">
-=======
-          <q-btn round flat>
+          <q-btn round flat @click="handleSignOut ">
             <q-avatar size="26px">
               <img src="https://cdn.quasar.dev/img/boy-avatar.png" />
->>>>>>> 4e21ed4b0090dab77cf3a633ae4569ca4de469fb
             </q-avatar>
             <q-tooltip>Log out</q-tooltip>
           </q-btn>
@@ -224,30 +216,18 @@
 </template>
 
 <script>
-<<<<<<< HEAD
-import { ref } from 'vue'
-import { getAuth, onAuthStateChanged, signOut } from "@firebase/auth";
-=======
 import { ref } from "vue";
 import { useQuasar } from "quasar";
->>>>>>> 4e21ed4b0090dab77cf3a633ae4569ca4de469fb
 import { useRouter } from "vue-router";
+import { getAuth,onAuthStateChanged, signOut} from "@firebase/auth";
 
 export default {
   name: "GooglePhotosLayout",
 
-<<<<<<< HEAD
-  setup () {
-    const leftDrawerOpen = ref(false)
-    const search = ref('')
-    const storage = ref(0.26)
-    const router = useRouter();
-=======
   setup() {
     const leftDrawerOpen = ref(false);
     const search = ref("");
     const storage = ref(0.26);
->>>>>>> 4e21ed4b0090dab77cf3a633ae4569ca4de469fb
 
     const $q = useQuasar();
     const router = useRouter();

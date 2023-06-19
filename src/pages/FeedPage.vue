@@ -30,32 +30,10 @@
             >
             </q-input>
 
-            <!-- <q-input
-
-              v-model="description"
-              label="Description"
-            >
-            </q-input> -->
-
             <q-input v-model="specifications" label="Specifications"> </q-input>
             <q-input v-model.number="price" label="Price"> </q-input>
-            <!-- <q-input
-
-              v-model.number="pricebefore"
-              label="Price Before"
-            >
-            </q-input> -->
             <q-input v-model="brand" label="Category"> </q-input>
-            <!-- <q-rating
-              v-model="ratings"
-              max="5"
-              size="3.5em"
-              color="yellow"
-              icon="star_border"
-              icon-selected="star"
-              icon-half="star_half"
-              no-dimming
-            /> -->
+
             <q-separator />
             <br />
             <q-file
@@ -79,26 +57,6 @@
               <template v-slot:hint> Product Pic </template>
             </q-file>
             <br />
-            <!-- <q-file
-              filled
-              bottom-slots
-              v-model="fileme"
-              label="Product View Image"
-              counter
-            >
-              <template v-slot:prepend>
-                <q-icon name="cloud_upload" @click.stop.prevent />
-              </template>
-              <template v-slot:append>
-                <q-icon
-                  name="close"
-                  @click.stop.prevent="fileme = null"
-                  class="cursor-pointer"
-                />
-              </template>
-
-              <template v-slot:hint> Field hint </template>
-            </q-file> -->
           </q-card-section>
           <q-card-actions align="right">
             <q-btn
@@ -112,66 +70,188 @@
           </q-card-actions>
         </q-card>
       </q-dialog>
-      <div class="q-pa-md row items-start">
-        <q-card
-          style="background-color: #d8e6e9 !important"
-          class="my-card q-ma-md"
-          :key="item.id"
-          v-for="item in datassss"
-          @mouseover="targetEl = true"
-        >
-          <q-img width="300px" height="250px" :src="item.image">
-            <q-tooltip
-              class="q-pl-lg q-pr-lg"
-              v-if="targetEl"
-              :target="targetEl"
-              anchor="center middle"
-              self="center middle"
-              style="background-color: #d89f65"
-              ><span class="text-weight-regular text-h5 text-black"
-                >ADD</span
-              ></q-tooltip
+    </div>
+    <div class="row">
+      <div class="col">
+        <div class="row">
+          <div class="col-9 row">
+            <q-card
+              style="background-color: #d8e6e9 !important"
+              @mouseover="targetEl = true"
+              v-for="item in datassss"
+              :key="item.id"
+              class="q-ma-md"
             >
-          </q-img>
-          <q-card-section>
-            <div
-              align="center"
-              class="text-h6 text-uppercase"
-              style="
-                white-space: nowrap;
-                overflow: hidden;
-                text-overflow: ellipsis;
-                max-width: 250px;
-              "
-            >
-              {{ item.name }}
-              <span class="text-h6 text-uppercase">&#8369;</span>
-              {{ item.price }}
-            </div>
+              <q-img
+                width="300px"
+                @click="addOrder(item)"
+                height="250px"
+                :src="item.image"
+              >
+                <q-tooltip
+                  class="q-pl-lg q-pr-lg"
+                  v-if="targetEl"
+                  :target="targetEl"
+                  anchor="center middle"
+                  self="center middle"
+                  style="background-color: #d89f65"
+                  ><span class="text-weight-regular text-h5 text-black"
+                    >ADD</span
+                  ></q-tooltip
+                >
+              </q-img>
+              <q-card-section>
+                <div
+                  align="center"
+                  class="text-h6 text-uppercase"
+                  style="
+                    white-space: nowrap;
+                    overflow: hidden;
+                    text-overflow: ellipsis;
+                    max-width: 250px;
+                  "
+                >
+                  {{ item.name }}
+                  <span class="text-h6 text-uppercase">&#8369;</span>
+                  {{ item.price }}
+                </div>
+                <div>
+                  <span class="text-uppercase">Category:</span>
+                  <q-badge rounded color="amber-10" class="q-ml-lg">{{
+                    item.brand
+                  }}</q-badge>
+                </div>
+              </q-card-section>
+              <q-card-section align="right">
+                <q-btn
+                  color="secondary"
+                  class="q-mr-md"
+                  icon="edit"
+                  @click="editData(item)"
+                />
+                <q-btn
+                  color="negative"
+                  icon="close"
+                  hidden
+                  @click="openedpassData(item)"
+                />
+              </q-card-section>
+            </q-card>
+          </div>
+          <div class="col">
             <div>
-              <span class="text-uppercase">Category:</span>
-              <q-badge rounded color="amber-10" class="q-ml-lg">{{
-                item.brand
-              }}</q-badge>
+              <q-card
+                flat
+                bordered
+                class="my-card"
+                :class="$q.dark.isActive ? 'bg-grey-9' : 'bg-grey-2'"
+              >
+                <!-- nasa -->
+                <q-card-section>
+                  <div class="row items-center no-wrap">
+                    <div class="col">
+                      <div class="text-h6">ORDER #</div>
+                      <q-separator inset />
+                      <div v-if="orders.length === 0" class="text-subtitle2">
+                        No orders
+                      </div>
+                      <div v-else>
+                        <div
+                          v-for="order in orders"
+                          :key="order.id"
+                          class="text-subtitle2 q-ma-md q-pa-sm"
+                        >
+                          <q-card
+                            bordered
+                            class="my-card"
+                            style="background-color: #eaf0f0 !important"
+                          >
+                            <q-item>
+                              <q-item-section avatar>
+                                <img
+                                  class="border-radius-inherit"
+                                  :src="order.image"
+                                  alt="order iamge"
+                                  width="70"
+                                  height="70"
+                                />
+                              </q-item-section>
+                              <q-item-section>
+                                <q-item-label> {{ order.name }} </q-item-label>
+                                <q-item-label class="text-h5">
+                                  {{ order.price }}
+                                </q-item-label>
+                              </q-item-section>
+                              <q-item-section>
+                                <q-item-label> QUANTITY </q-item-label>
+                                <q-label class="text-h5" align="center"
+                                  >{{ order.order_quantity }}
+                                </q-label>
+                              </q-item-section>
+                              <q-item-section>
+                                <q-label class="text-h5">
+                                  <q-btn
+                                    flat
+                                    dense
+                                    icon="add"
+                                    @click="increaseQuantity(order)"
+                                  ></q-btn>
+                                  <q-btn
+                                    flat
+                                    dense
+                                    icon="remove"
+                                    @click="decreaseQuantity(order)"
+                                  ></q-btn>
+                                </q-label>
+                              </q-item-section>
+                            </q-item>
+                          </q-card>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </q-card-section>
+                <q-separator inset />
+
+                <q-card class="my-card">
+                  <q-item>
+                    <q-card-section>
+                      <q-item-section>
+                        <q-item-label class="text-h5">
+                          TOTATL AMMOUNT:
+                        </q-item-label>
+                      </q-item-section>
+                    </q-card-section>
+                    <q-card-section>
+                      <q-item-section>
+                        <q-item-label class="text-h5">
+                          {{ totalAmount }}
+                        </q-item-label>
+                      </q-item-section>
+                    </q-card-section>
+                  </q-item>
+
+                  <q-separator />
+
+                  <q-card-actions>
+                    <q-btn
+                      @click="cancelOrder"
+                      color="deep-orange"
+                      glossy
+                      label="Cancel Order"
+                    />
+                    <q-btn
+                      @click="placeOrder"
+                      color="brown-5"
+                      label="Send Order"
+                    />
+                  </q-card-actions>
+                </q-card>
+              </q-card>
             </div>
-          </q-card-section>
-          <q-card-section align="right">
-            <q-btn
-              color="secondary"
-              class="q-mr-md"
-              icon="edit"
-              @click="editData(item)"
-            />
-            <q-btn
-              color="negative"
-              icon="close"
-              hidden
-              @click="openedpassData(item)"
-            />
-          </q-card-section>
-        </q-card>
+          </div>
+        </div>
       </div>
-      <!-- edit item -->
       <q-dialog persistent v-model="editModal" width="700px">
         <q-card style="width: 100%; max-width: 800px; padding: 20px">
           <div class="text-h6">Edit Product</div>
@@ -231,7 +311,7 @@
 
       <!-- delete item -->
       <q-dialog v-model="opened">
-        <q-card class="my-card bg-purple text-white">
+        <q-card class="my-card">
           <q-card-section>
             <div class="text-subtitle2">
               Are your sure you want do delete this item {{ docName }}?
@@ -251,6 +331,7 @@
 <script setup>
 import {
   onMounted,
+  computed,
   ref,
   getCurrentInstance,
   onBeforeMount,
@@ -301,6 +382,9 @@ const image = ref("");
 const editModal = ref(false);
 const openedAddModal = ref(false);
 const uuid = ref("");
+const orders = ref([]);
+const grandTot = ref(0);
+
 const firebaseConfig = {
   apiKey: "AIzaSyDbjhOcP2TgjTn1Me9NxaGLJYjF8i8ktZE",
   authDomain: "fire-tut-981d2.firebaseapp.com",
@@ -378,7 +462,50 @@ async function editData(item) {
   editModal.value = true;
 }
 
-async function saveEdit() {}
+const addOrder = (item, quantity = 1) => {
+  const newOrder = {
+    id: item.id,
+    name: item.name,
+    price: item.price,
+    image: item.image,
+    order_quantity: quantity,
+    payment_status: "unpaid",
+  };
+  orders.value = [...orders.value, { ...newOrder, grand_total: grandTot }]; // Insert grand_total outside newOrder
+};
+async function placeOrder() {
+  try {
+    const docRef = await addDoc(collection(db, "customerorder"), {
+      orders: orders.value, // Pass the orders value to the "customerorder" collection
+    });
+
+    orders.value = [];
+    console.log("Document written with ID: ", docRef.id);
+  } catch (e) {
+    console.error("Error adding document: ", e);
+  }
+}
+const totalAmount = computed(() => {
+  grandTot.value = 0;
+  for (const order of orders.value) {
+    grandTot.value += order.price * order.order_quantity;
+  }
+  return grandTot.value;
+});
+const increaseQuantity = (order) => {
+  order.order_quantity++;
+};
+
+const decreaseQuantity = (order) => {
+  if (order.order_quantity > 1) {
+    order.order_quantity--;
+  }
+};
+
+// Place the order logic goes here
+const cancelOrder = () => {
+  orders.value = [];
+};
 
 async function confirmed() {
   opened.value = false;
@@ -448,4 +575,8 @@ const handleSignOut = () => {
 function cancelEdit() {
   editModal.value = false;
 }
+onMounted(() => {
+  // console.log(`the component is now mounted. test`,globalVar )
+});
 </script>
+<style></style>
