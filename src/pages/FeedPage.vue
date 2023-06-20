@@ -1,12 +1,16 @@
 <template>
   <div>
-    <div align="right">
-      <q-btn icon="add" label="Add Product" @click="addModal()" flat dense>
+    <div align="right" class="q-ma-lg">
+      <q-btn
+        align="right"
+        style="background-color: #d8e6e9 !important"
+        icon="add"
+        label="Add Product"
+        @click="addModal()"
+        flat
+        dense
+      >
       </q-btn>
-    </div>
-
-    <div hidden align="right">
-      <q-btn hidden @click="handleSignOut" v-if="isLoggedIn">log out</q-btn>
     </div>
     <div>
       <!-- <q-file v-model="fileme" label="Standard" />
@@ -25,14 +29,14 @@
             <q-input
               label="Name"
               lazy-rules
-              :rules="[(val) => !!val || 'Please enter account  Name']"
+              :rules="[(val) => !!val || 'Please enter  Name']"
               v-model="name"
             >
             </q-input>
 
             <q-input v-model="specifications" label="Specifications"> </q-input>
             <q-input v-model.number="price" label="Price"> </q-input>
-            <q-input v-model="category" label="Category"> </q-input>
+            <q-select v-model="category" :options="optionsCategory" label="Category" />
 
             <q-separator />
             <br />
@@ -72,205 +76,210 @@
       </q-dialog>
     </div>
     <!-- now -->
-     <div class="row">
-          <div  class="col-9 row"  style="align-items: flex-start;">
-            <q-card
-              style="background-color: #d8e6e9 !important"
-              @mouseover="targetEl = true"
-              v-for="item in datassss"
-              :key="item.id"
-              class="q-ma-md"
-            >
-              <q-img
-                width="300px"
-                @click="addOrder(item)"
-                height="250px"
-                :src="item.image"
-              >
-                <q-tooltip
-                  class="q-pl-lg q-pr-lg"
-                  v-if="targetEl"
-                  :target="targetEl"
-                  anchor="center middle"
-                  self="center middle"
-                  style="background-color: #d89f65"
-                  ><span class="text-weight-regular text-h5 text-black"
-                    >ADD</span
-                  ></q-tooltip
-                >
-              </q-img>
-              <q-card-section>
-                <div
-                  align="center"
-                  class="text-h6 text-uppercase"
-                  style="
-                    white-space: nowrap;
-                    overflow: hidden;
-                    text-overflow: ellipsis;
-                    max-width: 250px;
-                  "
-                >
-                  {{ item.name }}
-                  <span class="text-h6 text-uppercase">&#8369;</span>
-                  {{ item.price }}
-                </div>
-                <div>
-                  <span class="text-uppercase">Category:</span>
-                  <q-badge rounded color="amber-10" class="q-ml-lg">{{
-                    item.category
-                  }}</q-badge>
-                </div>
-              </q-card-section>
-              <q-card-section align="right">
-                <q-btn
-                  color="secondary"
-                  class="q-mr-md"
-                  icon="edit"
-                  @click="editData(item)"
-                />
-                <q-btn
-                  color="negative"
-                  icon="close"
-                  hidden
-                  @click="openedpassData(item)"
-                />
-              </q-card-section>
-            </q-card>
+    <div class="row">
+      <div class="col-9 row" style="align-items: flex-start">
+        <q-tabs
+          class="q-ma-sm col-11 row"
+          align="justify"
+          :breakpoint="0"
+          v-model="tab"
+        ><q-tab value="all" name="all" icon="list" label="all"  class="hover-tab"/>
 
-          </div>
-          <!-- NEXT -->
-          <div class="col row">
+          <q-tab value="starter" name="starter" icon="lunch_dining" label="Starter"  class="hover-tab"/>
+          <q-tab value="drinks" name="drinks" icon="sports_bar" label="Drinks" class="hover-tab" />
+          <q-tab value="promos" name="promos" icon="fastfood" label="Promos" class="hover-tab" />
+        </q-tabs>
+        <q-card
+          style="background-color: #d8e6e9 !important"
+          @mouseover="targetEl = true"
+          v-for="item in datassss"
+          :key="item.id"
+          class="q-ma-md"
+        >
+          <q-img
+            width="300px"
+            @click="addOrder(item)"
+            height="250px"
+            :src="item.image"
+          >
+            <q-tooltip
+              class="q-pl-lg q-pr-lg"
+              v-if="targetEl"
+              :target="targetEl"
+              anchor="center middle"
+              self="center middle"
+              style="background-color: #d89f65"
+              ><span class="text-weight-regular text-h5 text-black"
+                >ADD</span
+              ></q-tooltip
+            >
+          </q-img>
+          <q-card-section>
+            <div
+              align="center"
+              class="text-h6 text-uppercase"
+              style="
+                white-space: nowrap;
+                overflow: hidden;
+                text-overflow: ellipsis;
+                max-width: 250px;
+              "
+            >
+              {{ item.name }}
+              <span class="text-h6 text-uppercase">&#8369;</span>
+              {{ item.price }}
+            </div>
             <div>
-              <q-card
-                flat
-                bordered
-                class="my-card"
-                :class="$q.dark.isActive ? 'bg-grey-9' : 'bg-grey-2'"
-              >
-                <!-- nasa -->
-                <q-card-section>
-                  <div>
-                    <div>
-                      <div class="text-h6">
-                        ORDER#
-                        <q-badge
-                          color="blue"
-                          align="right"
-                          v-if="orders.length !== 0"
-                        >
-                          {{ currentYear }}{{ uuid.slice(0, 5) }}
-                        </q-badge>
-                      </div>
-                      <q-separator inset />
-                      <div
-                        style="text-align: center"
-                        v-if="orders.length === 0"
-                        class="text-subtitle2 q-ma-sm"
+              <span class="text-uppercase">Category:</span>
+              <q-badge rounded color="amber-10" class="q-ml-lg">{{
+                item.category
+              }}</q-badge>
+            </div>
+          </q-card-section>
+          <q-card-section align="right">
+            <q-btn
+              color="secondary"
+              class="q-mr-md"
+              icon="edit"
+              @click="editData(item)"
+            />
+            <q-btn
+              color="negative"
+              icon="close"
+              hidden
+              @click="openedpassData(item)"
+            />
+          </q-card-section>
+        </q-card>
+      </div>
+      <!-- NEXT -->
+      <div class="col row">
+        <div>
+          <q-card
+            flat
+            bordered
+            class="my-card"
+            :class="$q.dark.isActive ? 'bg-grey-9' : 'bg-grey-2'"
+          >
+            <!-- nasa -->
+            <q-card-section>
+              <div>
+                <div>
+                  <div class="text-h6">
+                    ORDER#
+                    <q-badge
+                      color="blue"
+                      align="right"
+                      v-if="orders.length !== 0"
+                    >
+                      {{ currentYear }}{{ uuid.slice(0, 5) }}
+                    </q-badge>
+                  </div>
+                  <q-separator inset />
+                  <div
+                    style="text-align: center"
+                    v-if="orders.length === 0"
+                    class="text-subtitle2 q-ma-sm"
+                  >
+                    <img
+                      class=""
+                      align="center"
+                      v-if="$q.platform.is.desktop"
+                      alt="Quasar logo"
+                      width="150"
+                      height="150"
+                      src="~assets/noitem.png"
+                    />
+                  </div>
+                  <div v-else>
+                    <div
+                      v-for="order in orders"
+                      :key="order.id"
+                      class="text-subtitle2 q-ma-md q-pa-sm"
+                    >
+                      <q-card
+                        bordered
+                        class="my-card"
+                        style="background-color: #eaf0f0 !important"
                       >
-                        <img
-                          class=""
-                          align="center"
-                          v-if="$q.platform.is.desktop"
-                          alt="Quasar logo"
-                          width="150"
-                          height="150"
-                          src="~assets/noitem.png"
-                        />
-                      </div>
-                      <div v-else>
-                        <div
-                          v-for="order in orders"
-                          :key="order.id"
-                          class="text-subtitle2 q-ma-md q-pa-sm"
-                        >
-                          <q-card
-                            bordered
-                            class="my-card"
-                            style="background-color: #eaf0f0 !important"
-                          >
-                            <q-item>
-                              <q-item-section avatar>
-                                <img
-                                  class="border-radius-inherit"
-                                  :src="order.image"
-                                  alt="order iamge"
-                                  width="70"
-                                  height="70"
-                                />
-                              </q-item-section>
-                              <q-item-section>
-                                <q-item-label> {{ order.name }} </q-item-label>
-                                <q-item-label class="text-h5">
-                                  {{ order.price }}
-                                </q-item-label>
-                              </q-item-section>
-                              <q-item-section>
-                                <q-item-label> QUANTITY </q-item-label>
-                                <q-label class="text-h5" align="center"
-                                  >{{ order.order_quantity }}
-                                </q-label>
-                              </q-item-section>
-                              <q-item-section>
-                                <q-label class="text-h5">
-                                  <q-btn
-                                    flat
-                                    dense
-                                    icon="add"
-                                    @click="increaseQuantity(order)"
-                                  ></q-btn>
-                                  <q-btn
-                                    flat
-                                    dense
-                                    icon="remove"
-                                    @click="decreaseQuantity(order)"
-                                  ></q-btn>
-                                </q-label>
-                              </q-item-section>
-                            </q-item>
-                          </q-card>
-                        </div>
-                      </div>
+                        <q-item>
+                          <q-item-section avatar>
+                            <img
+                              class="border-radius-inherit"
+                              :src="order.image"
+                              alt="order iamge"
+                              width="70"
+                              height="70"
+                            />
+                          </q-item-section>
+                          <q-item-section>
+                            <q-item-label> {{ order.name }} </q-item-label>
+                            <q-item-label class="text-h5">
+                              {{ order.price }}
+                            </q-item-label>
+                          </q-item-section>
+                          <q-item-section>
+                            <q-item-label> QUANTITY </q-item-label>
+                            <q-label class="text-h5" align="center"
+                              >{{ order.order_quantity }}
+                            </q-label>
+                          </q-item-section>
+                          <q-item-section>
+                            <q-label class="text-h5">
+                              <q-btn
+                                flat
+                                dense
+                                icon="add"
+                                @click="increaseQuantity(order)"
+                              ></q-btn>
+                              <q-btn
+                                flat
+                                dense
+                                icon="remove"
+                                @click="decreaseQuantity(order)"
+                              ></q-btn>
+                            </q-label>
+                          </q-item-section>
+                        </q-item>
+                      </q-card>
                     </div>
                   </div>
+                </div>
+              </div>
+            </q-card-section>
+            <q-separator inset />
+
+            <q-card class="my-card">
+              <q-item>
+                <q-card-section>
+                  <q-item-section>
+                    <q-item-label class="text-h5">
+                      TOTAL AMOUNT:
+                    </q-item-label>
+                  </q-item-section>
                 </q-card-section>
-                <q-separator inset />
+                <q-card-section>
+                  <q-item-section>
+                    <q-item-label class="text-h5">
+                      {{ totalAmount }}
+                    </q-item-label>
+                  </q-item-section>
+                </q-card-section>
+              </q-item>
 
-                <q-card class="my-card">
-                  <q-item>
-                    <q-card-section>
-                      <q-item-section>
-                        <q-item-label class="text-h5">
-                          TOTATL AMMOUNT:
-                        </q-item-label>
-                      </q-item-section>
-                    </q-card-section>
-                    <q-card-section>
-                      <q-item-section>
-                        <q-item-label class="text-h5">
-                          {{ totalAmount }}
-                        </q-item-label>
-                      </q-item-section>
-                    </q-card-section>
-                  </q-item>
+              <q-separator />
 
-                  <q-separator />
-
-                  <q-card-actions>
-                    <q-btn
-                      @click="cancelOrder"
-                      color="deep-orange"
-                      glossy
-                      label="Cancel Order"
-                    />
-                    <q-btn
-                      @click="placeOrder"
-                      color="brown-5"
-                      label="Send Order"
-                    />
-                  </q-card-actions>
-                </q-card>
-              </q-card>
-
+              <q-card-actions>
+                <q-btn
+                  @click="cancelOrder"
+                  color="deep-orange"
+                  glossy
+                  label="Cancel Order"
+                />
+                <q-btn @click="placeOrder" color="brown-5" label="Send Order" />
+              </q-card-actions>
+            </q-card>
+          </q-card>
         </div>
       </div>
       <q-dialog persistent v-model="editModal" width="700px">
@@ -355,12 +364,13 @@ import {
   onMounted,
   computed,
   ref,
+  watch,
   getCurrentInstance,
   onBeforeMount,
   onServerPrefetch,
 } from "vue";
 import { useRouter } from "vue-router";
-import { useQuasar } from "quasar";
+import { useQuasar, QSpinnerGears } from 'quasar'
 import { initializeApp, getApp } from "firebase/app";
 import {
   getFirestore,
@@ -393,6 +403,12 @@ const price = ref(0);
 const pricebefore = ref(0);
 const ratings = ref(2.3);
 const category = ref("");
+const tab = ref("all")
+const q = ref(null); // Placeholder for the Firestore query
+    const unsubscribe = ref(null); // Placeholder for the unsubscribe function
+const optionsCategory = ref( [
+        'starter', 'drinks', 'promos',
+      ])
 const order_quatity = 0;
 const images = "";
 const opened = ref(false);
@@ -434,6 +450,7 @@ async function addModal() {
 }
 const router = useRouter();
 const isLoggedIn = ref(true);
+const $q = useQuasar()
 let auth;
 
 async function Add() {
@@ -521,7 +538,40 @@ async function placeOrder() {
     const docRef = await addDoc(collection(db, "orders"), {
       orders: orders.value, // Pass the orders value to the "customerorder" collection
     });
+    const dialog = $q.dialog({
+        title: 'Uploading...',
+        dark: true,
+        message: '0%',
+        progress: {
+          spinner: QSpinnerGears,
+          color: 'amber'
+        },
+        persistent: true, // we want the user to not be able to close it
+        ok: false // we want the user to not be able to close it
+      })
 
+      // we simulate some progress here...
+      let percentage = 0
+      const interval = setInterval(() => {
+        percentage = Math.min(100, percentage + Math.floor(Math.random() * 22))
+
+        // we update the dialog
+        dialog.update({
+          message: `${percentage}%`
+        })
+
+        // if we are done...
+        if (percentage === 100) {
+          clearInterval(interval)
+
+          dialog.update({
+            title: 'Done!',
+            message: 'Upload completed successfully',
+            progress: false,
+            ok: true
+          })
+        }
+      }, 300)
     orders.value = [];
     console.log("Document written with ID: ", docRef.id);
   } catch (e) {
@@ -570,35 +620,65 @@ onServerPrefetch(async () => {
 });
 var user = getAuth().currentUser;
 var nameme, email, photoURL, uid;
-console.log(user.uid);
 uuid.value = user.uid;
 if (user != null) {
   nameme = user.displayName;
   uid = user.uid;
 }
-console.log("yow", uuid.value);
-const q = query(collection(db, "iam"), where("userid", "==", uuid.value));
-const unsubscribe = onSnapshot(q, (snapshot) => {
-  snapshot.docChanges().forEach((change) => {
-    console.log("doc.data()", change.doc.data());
-    // datassss.value =change
-    var data = {
-      ...change.doc.data(),
-      ...{ id: change.doc.id },
-    };
-    if (change.type === "added") {
-      datassss.value.push(data);
-    }
-    if (change.type === "modified") {
-      console.log("Modified city: ", data);
-    }
-    if (change.type === "removed") {
-      const index = datassss.value.findIndex(
-        (d) => d.name === change.doc.data().name
-      );
-      console.log("Removed city: ", change.doc.data(), change.doc.id);
-      datassss.value.splice(index, 1);
-    }
+watch(tab, (newTab, oldTab) => {
+  console.log("tab", tab)
+  console.log("tab", newTab)
+
+  // Unsubscribe from the previous query (if any)
+  if (unsubscribe.value) {
+    unsubscribe.value();
+  }
+
+  // Set the initial category value to "starter" if newTab is falsy
+  const category = newTab;
+  if(category === "all"){
+    q.value = query(
+    collection(db, 'iam'),
+    where('userid', '==', uuid.value),
+  );
+  }else{
+    q.value = query(
+    collection(db, 'iam'),
+    where('userid', '==', uuid.value),
+    where('category', '==', category),
+  );
+
+  }
+
+  // Update the Firestore query with the new tab value
+
+  // Subscribe to the new query and update data
+  unsubscribe.value = onSnapshot(q.value, (snapshot) => {
+    datassss.value = []; // Clear previous data
+
+    snapshot.docChanges().forEach((change) => {
+      var data = {
+        ...change.doc.data(),
+        ...{ id: change.doc.id },
+      };
+      if (change.type === 'added') {
+        datassss.value.push(data);
+      }
+      if (change.type === 'modified') {
+        console.log('Modified city: ', data);
+      }
+      if (change.type === 'removed') {
+        const index = datassss.value.findIndex(
+          (d) => d.name === change.doc.data().name
+        );
+        console.log(
+          'Removed city: ',
+          change.doc.data(),
+          change.doc.id
+        );
+        datassss.value.splice(index, 1);
+      }
+    });
   });
 });
 const handleSignOut = () => {
@@ -618,8 +698,49 @@ const handleSignOut = () => {
 function cancelEdit() {
   editModal.value = false;
 }
-onMounted(() => {
-  // console.log(`the component is now mounted. test`,globalVar )
+onMounted(async () => {
+  // Set the initial tab value to "starter"
+  tab.value = "all";
+
+  // Update the Firestore query with the initial tab value
+  q.value = query(
+    collection(db, "iam"),
+    where("userid", "==", uuid.value),
+  );
+
+  // Subscribe to the query and update data
+  unsubscribe.value = onSnapshot(q.value, (snapshot) => {
+    datassss.value = []; // Clear previous data
+
+    snapshot.docChanges().forEach((change) => {
+      var data = {
+        ...change.doc.data(),
+        ...{ id: change.doc.id },
+      };
+      if (change.type === "added") {
+        datassss.value.push(data);
+      }
+      if (change.type === "modified") {
+        console.log("Modified city: ", data);
+      }
+      if (change.type === "removed") {
+        const index = datassss.value.findIndex(
+          (d) => d.name === change.doc.data().name
+        );
+        console.log(
+          "Removed city: ",
+          change.doc.data(),
+          change.doc.id
+        );
+        datassss.value.splice(index, 1);
+      }
+    });
+  });
 });
 </script>
-<style></style>
+<style>
+  .hover-tab:hover {
+    background-color: #d8e6e9 !important;
+    border-radius: 20px;
+  }
+</style>
